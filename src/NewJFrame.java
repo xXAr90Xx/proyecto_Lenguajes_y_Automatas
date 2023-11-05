@@ -1,3 +1,9 @@
+
+import java.awt.Color;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -29,9 +35,10 @@ public class NewJFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea2 = new javax.swing.JTextArea();
+        jTextOutput = new javax.swing.JTextArea();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
+        jMenuGuardar = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -40,13 +47,23 @@ public class NewJFrame extends javax.swing.JFrame {
         jTextArea1.setRows(5);
         jScrollPane1.setViewportView(jTextArea1);
 
-        jTextArea2.setColumns(20);
-        jTextArea2.setRows(5);
-        jTextArea2.setEnabled(false);
-        jTextArea2.setOpaque(false);
-        jScrollPane2.setViewportView(jTextArea2);
+        jTextOutput.setColumns(20);
+        jTextOutput.setRows(5);
+        jTextOutput.setEnabled(false);
+        jTextOutput.setOpaque(false);
+        jScrollPane2.setViewportView(jTextOutput);
 
         jMenu1.setText("File");
+
+        jMenuGuardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMenuGuardar.setText("Guardar");
+        jMenuGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuGuardarMouseClicked(evt);
+            }
+        });
+        jMenu1.add(jMenuGuardar);
+
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
@@ -73,6 +90,15 @@ public class NewJFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jMenuGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuGuardarMouseClicked
+            try (BufferedWriter writer = new BufferedWriter(new FileWriter("Codigo"))) {
+            writer.write(jTextArea1.getText());
+            System.out.println("File saved successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }//GEN-LAST:event_jMenuGuardarMouseClicked
 
     /**
      * @param args the command line arguments
@@ -113,9 +139,10 @@ public class NewJFrame extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuItem jMenuGuardar;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea jTextOutput;
     // End of variables declaration//GEN-END:variables
 }
