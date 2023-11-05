@@ -20,7 +20,7 @@ public class AnalizadorLexico {
         List<Token> tokens = new ArrayList<Token>();
 
         String regex = "\\s+|("
-                + "Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|"
+                + "Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion"
                 + "\\d+|==|<=|>=|[+*\\-/%=<>()]|[a-zA-Z_][a-zA-Z0-9_]*|\"[^\"]*\")";
 
         Pattern pattern = Pattern.compile(regex);
@@ -30,9 +30,9 @@ public class AnalizadorLexico {
             String textoToken = matcher.group();
             TipoToken tipoToken;
 //
-            if (textoToken.matches("\\d+")) {
+            if (textoToken.matches("\\d+|[+-]?[d+]+|[+-]?[d]*.[d]+([eE][+-]?[d]+)?")) {
                 tipoToken = TipoToken.NUMERO;
-            } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE")) {
+            } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion")) {
                 tipoToken = TipoToken.PALABRARESERVADA;
             } else if (textoToken.matches("\"[^\"]*\"")) {
                 tipoToken = TipoToken.CARACTER;
