@@ -38,8 +38,16 @@ public class AnalizadorLexico {
                 tipoToken = TipoToken.CARACTER;
             } else if (textoToken.matches(" ")) {
                 tipoToken = TipoToken.ESPACIO;
-            } else if (textoToken.matches("==|<=|>=|[+*\\-/%=<>()]")) {
-                tipoToken = TipoToken.OPERADOR;
+            } else if (textoToken.matches("[+|*|/|-|%|e|E]")) {
+                tipoToken = TipoToken.OPERADORAR;
+            }else if (textoToken.matches("==|<=|>=|[+*\\-/%=<>()]")) {
+                tipoToken = TipoToken.OPERADORRE;
+            }else if (textoToken.matches("[()|[]|¿?]")) {
+                tipoToken = TipoToken.OPERADORAG;
+            }else if (textoToken.matches("[++|--]")) {
+                tipoToken = TipoToken.OPERADORIYD;
+            }else if (textoToken.matches("(&&|^^|!)")) {
+                tipoToken = TipoToken.OPERADORLOG;
             }else if (textoToken.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
                 tipoToken = TipoToken.IDENTIFICADOR;
             }else if (textoToken.matches("\n")) {
@@ -63,7 +71,11 @@ enum TipoToken {
     CARACTER,
     INVALIDO,
     ESPACIO,
-    OPERADOR,
+    OPERADORAR,
+    OPERADORRE,
+    OPERADORAG,
+    OPERADORIYD,
+    OPERADORLOG,
     PALABRARESERVADA,
     SALTO
     // ...
