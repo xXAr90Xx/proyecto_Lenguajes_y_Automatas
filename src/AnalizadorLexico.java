@@ -30,7 +30,7 @@ public class AnalizadorLexico {
             String textoToken = matcher.group();
             TipoToken tipoToken;
 //
-            if (textoToken.matches("\\d+|[+-]?[d+]+|[+-]?[d]*.[d]+([eE][+-]?[d]+)?")) {
+            if (textoToken.matches("\\d+|[+-]?[d+]+|[+-]?[d+]*.[d+]+([eE][+-]?[d+]+)?")) {
                 tipoToken = TipoToken.NUMERO;
             } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion")) {
                 tipoToken = TipoToken.PALABRARESERVADA;
