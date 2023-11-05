@@ -6,7 +6,8 @@ import java.util.List;
 public class AnalizadorLexico {
 
     public static void main(String[] args) {
-        String codigoEntrada = "Num años = 12+12\nSi(12<=25)";
+        String codigoEntrada = "Num años = 12+12\nSi(12<=25)"
+                + "\n MensajeS \"asinomasquedó\"";
 
         List<Token> tokens = analizar(codigoEntrada);
 
@@ -28,17 +29,21 @@ public class AnalizadorLexico {
         while (matcher.find()) {
             String textoToken = matcher.group();
             TipoToken tipoToken;
-
+//
             if (textoToken.matches("\\d+")) {
                 tipoToken = TipoToken.NUMERO;
-            } else if (textoToken.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
-                tipoToken = TipoToken.IDENTIFICADOR;
+            } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE")) {
+                tipoToken = TipoToken.PALABRARESERVADA;
             } else if (textoToken.matches("\"[^\"]*\"")) {
                 tipoToken = TipoToken.CARACTER;
             } else if (textoToken.matches(" ")) {
                 tipoToken = TipoToken.ESPACIO;
-            } else if (textoToken.matches("[+*\\-/%=<>()]")) {
-                tipoToken = TipoToken.SIGNO;
+            } else if (textoToken.matches("==|<=|>=|[+*\\-/%=<>()]")) {
+                tipoToken = TipoToken.OPERADOR;
+            }else if (textoToken.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
+                tipoToken = TipoToken.IDENTIFICADOR;
+            }else if (textoToken.matches("\n")) {
+                tipoToken= TipoToken.SALTO;
             }else
             {
                 tipoToken = TipoToken.INVALIDO;
@@ -58,7 +63,9 @@ enum TipoToken {
     CARACTER,
     INVALIDO,
     ESPACIO,
-    SIGNO
+    OPERADOR,
+    PALABRARESERVADA,
+    SALTO
     // ...
 }
 
