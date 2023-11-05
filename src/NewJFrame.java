@@ -36,10 +36,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextOutput = new javax.swing.JTextArea();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenuGuardar = new javax.swing.JMenuItem();
-        jMenu2 = new javax.swing.JMenu();
+        btnGualdal = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -53,23 +50,12 @@ public class NewJFrame extends javax.swing.JFrame {
         jTextOutput.setOpaque(false);
         jScrollPane2.setViewportView(jTextOutput);
 
-        jMenu1.setText("File");
-
-        jMenuGuardar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_DOWN_MASK));
-        jMenuGuardar.setText("Guardar");
-        jMenuGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenuGuardarMouseClicked(evt);
+        btnGualdal.setText("Guardar");
+        btnGualdal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGualdalActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuGuardar);
-
-        jMenuBar1.add(jMenu1);
-
-        jMenu2.setText("Edit");
-        jMenuBar1.add(jMenu2);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -77,11 +63,17 @@ public class NewJFrame extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 565, Short.MAX_VALUE)
             .addComponent(jScrollPane2)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnGualdal, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(31, Short.MAX_VALUE)
+                .addContainerGap(16, Short.MAX_VALUE)
+                .addComponent(btnGualdal)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -91,14 +83,15 @@ public class NewJFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jMenuGuardarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuGuardarMouseClicked
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter("Codigo"))) {
+    private void btnGualdalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGualdalActionPerformed
+        System.out.println("PUTAAAAAAAAAAS");   
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Codigo"))) {
             writer.write(jTextArea1.getText());
             System.out.println("File saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }//GEN-LAST:event_jMenuGuardarMouseClicked
+    }//GEN-LAST:event_btnGualdalActionPerformed
 
     /**
      * @param args the command line arguments
@@ -136,10 +129,7 @@ public class NewJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuGuardar;
+    private javax.swing.JButton btnGualdal;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
