@@ -21,7 +21,7 @@ public class AnalizadorLexico {
 
         String regex = "\\s+|("
                 + "Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad"
-                + "\\d+|==|<=|>=|[+*\\-/%=<>()]|[a-zA-Z_][a-zA-Z0-9_]*|\"[^\"]*\")";
+                + "\\d+|==|<=|>=|!=|[+*\\-/%=<>()]|[a-zA-Z_][a-zA-Z0-9_]*|\"[^\"]*\")";
 
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(codigo);
@@ -30,7 +30,7 @@ public class AnalizadorLexico {
             String textoToken = matcher.group();
             TipoToken tipoToken;
 //
-            if (textoToken.matches("\\d+|[+-]?[d+]|[+-]?[d+]*.[d+]|([eE][+-]?[d+])?")) {
+            if (textoToken.matches("[+-]?\\d+|([+-]?\\d*\\.\\d+([eE][+-]?\\d+)?)?")) {
                 tipoToken = TipoToken.NUMERO;
             } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad")) {
                 tipoToken = TipoToken.PALABRARESERVADA;
@@ -40,20 +40,21 @@ public class AnalizadorLexico {
                 tipoToken = TipoToken.ESPACIO;
             } else if (textoToken.matches("[+|*|/|-|%|e|E]")) {
                 tipoToken = TipoToken.OPERADORAR;
-            }else if (textoToken.matches("==|<=|>=|[+*\\-/%=<>()]")) {
+            } else if (textoToken.matches("==|<=|>=|!=")) {
                 tipoToken = TipoToken.OPERADORRE;
-            }else if (textoToken.matches("[()|[]|¿?]")) {
+            } else if (textoToken.matches("\\[\\(|\\)|\\[|\\]|\\¿|\\?]")) {
                 tipoToken = TipoToken.OPERADORAG;
-            }else if (textoToken.matches("[++|--]")) {
+            } else if (textoToken.matches("\\[++|--]")) {
                 tipoToken = TipoToken.OPERADORIYD;
-            }else if (textoToken.matches("(&&|^^|!)")) {
+            } else if (textoToken.matches("(&&|^^|!)")) {
                 tipoToken = TipoToken.OPERADORLOG;
-            }else if (textoToken.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
+            } else if (textoToken.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
                 tipoToken = TipoToken.IDENTIFICADOR;
-            }else if (textoToken.matches("\n")) {
-                tipoToken= TipoToken.SALTO;
-            }else
-            {
+            } else if (textoToken.matches("\n")) {
+                tipoToken = TipoToken.SALTO;
+            } else if (textoToken.matches("=|\\+=|-=")) {
+                tipoToken = TipoToken.OPERADORASG;
+            } else {
                 tipoToken = TipoToken.INVALIDO;
             }
 
@@ -76,6 +77,7 @@ enum TipoToken {
     OPERADORAG,
     OPERADORIYD,
     OPERADORLOG,
+    OPERADORASG,
     PALABRARESERVADA,
     SALTO
     // ...
