@@ -160,7 +160,7 @@ public class NewJFrame extends javax.swing.JFrame {
             System.out.println("File saved successfully.");
         } catch (IOException e) {
             e.printStackTrace();
-        }
+        }        
     }//GEN-LAST:event_btnGualdalActionPerformed
 
     private void BtnAnalizadorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnAnalizadorMouseClicked
