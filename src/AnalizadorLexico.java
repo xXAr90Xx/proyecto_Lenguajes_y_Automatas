@@ -1,35 +1,68 @@
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.regex.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class AnalizadorLexico {
+    
+    public AnalizadorLexico(String rutaArchivo) {
+        try {
+            // Carga el código desde el archivo y realiza el análisis léxico.
+            String codigoEntrada = cargarCodigoDesdeArchivo(rutaArchivo);
+            List<Token> tokens = analizar(codigoEntrada);
 
-    public static void main(String[] args) {
-        String codigoEntrada = "Num años = 12+12\nSi(12<=25)"
-                + "\n MensajeS \"asinomasquedó\"";
-
-        List<Token> tokens = analizar(codigoEntrada);
-
-        for (Token token : tokens) {
-            System.out.println(token);
+            // Imprime los tokens resultantes.
+            for (Token token : tokens) {
+                System.out.println(token);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
+    /**
+     * Carga el código desde un archivo de texto.
+     *
+     * @param rutaArchivo Ruta del archivo de texto.
+     * @return Código cargado desde el archivo.
+     * @throws IOException Si ocurre un error al leer el archivo.
+     */
+    public String cargarCodigoDesdeArchivo(String rutaArchivo) throws IOException {
+        StringBuilder codigo = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(rutaArchivo))) {
+            String linea;
+            while ((linea = reader.readLine()) != null) {
+                codigo.append(linea).append("\n");
+            }
+        }
+        return codigo.toString();
+    }
+
+    /**
+     * Realiza el análisis léxico del código.
+     *
+     * @param codigo Código a analizar.
+     * @return Lista de tokens generados durante el análisis léxico.
+     */
     public static List<Token> analizar(String codigo) {
         List<Token> tokens = new ArrayList<Token>();
 
         String regex = "\\s+|("
                 + "Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad"
-                + "\\d+|==|<=|>=|!=|[+*\\-/%=<>()]|[a-zA-Z_][a-zA-Z0-9_]*|\"[^\"]*\")";
+                + "\\d+|==|<=|>=|!=|[+*\\-/%=<>()¿?]|[a-zA-Z_][a-zA-Z0-9_]*|\"[^\"]*\")";
 
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(codigo);
 
+        // Itera sobre las coincidencias y genera tokens.
         while (matcher.find()) {
             String textoToken = matcher.group();
             TipoToken tipoToken;
-//
+
+            // Identifica el tipo de token según la expresión regular.
             if (textoToken.matches("[+-]?\\d+|([+-]?\\d*\\.\\d+([eE][+-]?\\d+)?)?")) {
                 tipoToken = TipoToken.NUMERO;
             } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad")) {
@@ -58,6 +91,7 @@ public class AnalizadorLexico {
                 tipoToken = TipoToken.INVALIDO;
             }
 
+            // Agrega el token a la lista.
             tokens.add(new Token(tipoToken, textoToken));
         }
 
@@ -65,6 +99,9 @@ public class AnalizadorLexico {
     }
 }
 
+/**
+ * Enumeración que representa los diferentes tipos de tokens.
+ */
 enum TipoToken {
     // Define tus tipos de token aquí
     NUMERO,
@@ -83,24 +120,48 @@ enum TipoToken {
     // ...
 }
 
+/**
+ * Clase que representa un token con su tipo y texto asociado.
+ */
 class Token {
 
     private TipoToken tipo;
     private String texto;
 
+    /**
+     * Constructor de la clase Token.
+     *
+     * @param tipo Tipo del token.
+     * @param texto Texto asociado al token.
+     */
     public Token(TipoToken tipo, String texto) {
         this.tipo = tipo;
         this.texto = texto;
     }
 
+    /**
+     * Obtiene el tipo del token.
+     *
+     * @return Tipo del token.
+     */
     public TipoToken getTipo() {
         return tipo;
     }
 
+    /**
+     * Obtiene el texto asociado al token.
+     *
+     * @return Texto asociado al token.
+     */
     public String getTexto() {
         return texto;
     }
 
+    /**
+     * Representación en cadena del token.
+     *
+     * @return Cadena que representa el token.
+     */
     @Override
     public String toString() {
         return "Token tipo = " + tipo + " , texto= " + texto;
