@@ -125,8 +125,8 @@ enum TipoToken {
  */
 class Token {
 
-    private TipoToken tipo;
-    private String texto;
+    public TipoToken tipo;
+    public String texto;
 
     /**
      * Constructor de la clase Token.

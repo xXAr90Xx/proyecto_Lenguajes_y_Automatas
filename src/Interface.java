@@ -8,6 +8,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /*
@@ -21,6 +22,7 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Interface extends javax.swing.JFrame {
 
+    AnalizadorLexico analizador;
     DefaultTableModel tabla = new DefaultTableModel();
     public int cuenta = 0;
 
@@ -43,7 +45,7 @@ public class Interface extends javax.swing.JFrame {
         BtnAnalizador = new javax.swing.JButton();
         jTextAreaLinea = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableS = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -83,7 +85,7 @@ public class Interface extends javax.swing.JFrame {
         jTextAreaLinea.setEnabled(false);
         jTextAreaLinea.setFocusable(false);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableS.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -91,7 +93,7 @@ public class Interface extends javax.swing.JFrame {
                 "Nombre", "Tipo"
             }
         ));
-        jScrollPane3.setViewportView(jTable1);
+        jScrollPane3.setViewportView(jTableS);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -105,14 +107,14 @@ public class Interface extends javax.swing.JFrame {
                         .addGap(173, 173, 173)
                         .addComponent(BtnAnalizador, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 568, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addComponent(jTextAreaLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(33, 33, 33)
+                                .addComponent(jScrollPane2)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -150,27 +152,9 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGualdalActionPerformed
 
     private void BtnAnalizadorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnAnalizadorMouseClicked
-        AnalizadorLexico analizador;
-    try {
-        // Instancia el analizador léxico con el nombre del archivo.
-        analizador = new AnalizadorLexico("codigo");
+        terrorAnal();
+        
 
-        // Obtiene los tokens del analizador léxico.
-        List<Token> tokens = analizador.analizar(analizador.cargarCodigoDesdeArchivo("codigo"));
-
-        // Construye la cadena de salida usando el método toString de cada token.
-        StringBuilder salida = new StringBuilder();
-        for (Token token : tokens) {
-            salida.append(token.toString()).append("\n");
-        }
-
-        // Establece el texto del JTextArea con la salida generada.
-        jTextOutput.setText(salida.toString());
-
-        System.out.println("Archivo Analizado");
-    } catch (IOException e) {
-        e.printStackTrace();
-    }
     }//GEN-LAST:event_BtnAnalizadorMouseClicked
 
     private void jTextAreaCodigoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextAreaCodigoKeyTyped
@@ -194,7 +178,53 @@ public class Interface extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jTextAreaCodigoKeyTyped
+    public void terrorAnal() {
+        try {
+            // Instancia el analizador léxico con el nombre del archivo.
+            analizador = new AnalizadorLexico("codigo");
 
+            // Obtiene los tokens del analizador léxico.
+            List<Token> tokens = analizador.analizar(analizador.cargarCodigoDesdeArchivo("codigo"));
+
+            // Construye la cadena de salida usando el método toString de cada token.
+            StringBuilder salida = new StringBuilder();
+            for (Token token : tokens) {
+                salida.append(token.toString()).append("\n");
+            }
+
+            // Establece el texto del JTextArea con la salida generada.
+            jTextOutput.setText(salida.toString());
+            llenarTS(tokens);
+            System.out.println("Archivo Analizado");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Método para llenar la tabla de símbolos
+    public static void llenarTS(List<Token> tokens) {
+        // Crea el modelo de la tabla de símbolos
+        DefaultTableModel modelo = new DefaultTableModel();
+        modelo.addColumn("Nombre");
+        modelo.addColumn("Tipo");
+
+        // Recorre la lista de tokens y agrega cada token a la tabla de símbolos
+        for (Token token : tokens) {
+            // Ignora los tokens de espacio y salto de línea
+            if (token.getTipo() == TipoToken.ESPACIO || token.getTipo() == TipoToken.SALTO) {
+                continue;
+            }
+
+            // Agrega una fila con el nombre y tipo del token
+            modelo.addRow(new Object[]{token.getTexto(), token.getTipo()});
+        }
+
+        // Asigna el modelo a la tabla de símbolos (reemplaza "tuTabla" con el nombre real de tu tabla)
+        jTableS.setModel(modelo);
+    }
+
+    // ...
     public static String leerArchivo(String nombreArchivo) {
         StringBuilder contenido = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(nombreArchivo))) {
@@ -261,7 +291,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable1;
+    private static javax.swing.JTable jTableS;
     private javax.swing.JTextArea jTextAreaCodigo;
     public static javax.swing.JTextArea jTextAreaLinea;
     public static javax.swing.JTextArea jTextOutput;
