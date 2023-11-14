@@ -51,7 +51,7 @@ public class AnalizadorLexico {
         List<Token> tokens = new ArrayList<Token>();
 
         String regex = "\\s+|("
-                + "Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad"
+                + "Si|SiNo|FinSi|FinSino|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad"
                 + "\\d+|==|<=|>=|!=|[+*\\-/%=<>()¿?]|[a-zA-Z_][a-zA-Z0-9_]*|\"[^\"]*\")";
 
         Pattern pattern = Pattern.compile(regex);
