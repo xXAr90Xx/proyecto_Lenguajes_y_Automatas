@@ -89,8 +89,8 @@ public class AnalizadorLexico {
                 tipoToken = TipoToken.INVALIDO;
             }
 
-            // Agrega el token a la lista.
-            tokens.add(new Token(tipoToken, textoToken));
+             // Agregar el token normalmente
+//        tokens.add(new Token(tipoToken, textoToken));
         }
 
         return tokens;
@@ -127,6 +127,8 @@ class Token {
 
     public TipoToken tipo;
     public String texto;
+    // Campo adicional para el mensaje de error
+    private String error;
 
     /**
      * Constructor de la clase Token.
@@ -134,9 +136,11 @@ class Token {
      * @param tipo Tipo del token.
      * @param texto Texto asociado al token.
      */
-    public Token(TipoToken tipo, String texto) {
+     // Constructor modificado para incluir el mensaje de error
+    public Token(TipoToken tipo, String texto, String error) {
         this.tipo = tipo;
         this.texto = texto;
+        this.error = error;
     }
 
     /**
@@ -156,7 +160,10 @@ class Token {
     public String getTexto() {
         return texto;
     }
-
+    // Método para obtener el mensaje de error
+    public String getError() {
+        return error;
+    }
     /**
      * Representación en cadena del token.
      *
