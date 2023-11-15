@@ -1,11 +1,38 @@
-1
-2
-3
-{asd
-+
-sad+
-qwew
-213123
+IniB Jugador
 
-777
-6&&&///())=)=(/&%$#""WSDCV  CZXCFVGHJIOLP?¨Ñ¨[*POIUYG?¡?=)(/Y&T4-x.-sc<a.xc
+Personaje Jugador = nuevo Personaje
+
+Jugador.salud(100)
+
+Jugador.fisicas.posicion(60,20)
+ 
+Jugador.imagen.animacion('mover')
+
+Jugador.fisicas.velocidad(10)
+
+Jugadores++
+
+FinB
+
+
+Jugador
+
+Enemigo
+
+Mientras Enemigo.prueva.vida>0
+
+prueva.Imagenes.Animacion('Atacar')
+
+FMientras
+
+Si Jugadores<1?
+ 
+Jugador
+
+FinSI
+
+SiNo Enemigo<1?
+
+Repite Enemigo (Jugadores>0)
+
+FinSiNO

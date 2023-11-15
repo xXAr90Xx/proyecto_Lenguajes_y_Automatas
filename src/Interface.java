@@ -100,41 +100,39 @@ public class Interface extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(53, 53, 53)
-                        .addComponent(btnGualdal, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(173, 173, 173)
-                        .addComponent(BtnAnalizador, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jTextAreaLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(33, 33, 33)
-                                .addComponent(jScrollPane2)))
+                        .addComponent(jTextAreaLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 578, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(33, 33, 33)
+                        .addComponent(jScrollPane2)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(129, 129, 129)
+                .addComponent(btnGualdal, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(224, 224, 224)
+                .addComponent(BtnAnalizador, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(41, 41, 41)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(BtnAnalizador)
+                    .addComponent(btnGualdal))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnGualdal)
-                            .addComponent(BtnAnalizador))
-                        .addGap(48, 48, 48)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTextAreaLinea, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 416, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -142,18 +140,18 @@ public class Interface extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGualdalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGualdalActionPerformed
-        System.out.println("Gualdado");
+        System.out.println("Guardado");
         try (BufferedWriter writer = new BufferedWriter(new FileWriter("Codigo"))) {
             writer.write(jTextAreaCodigo.getText());
             System.out.println("File saved successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error al guardar el archivo: " + e.getMessage());
         }
     }//GEN-LAST:event_btnGualdalActionPerformed
 
     private void BtnAnalizadorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BtnAnalizadorMouseClicked
-        terrorAnal();
-        
+        realizarAnalisisLexico();
+
 
     }//GEN-LAST:event_BtnAnalizadorMouseClicked
 
@@ -178,28 +176,20 @@ public class Interface extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jTextAreaCodigoKeyTyped
-    public void terrorAnal() {
-        try {
-            // Instancia el analizador léxico con el nombre del archivo.
-            analizador = new AnalizadorLexico("codigo");
-
-            // Obtiene los tokens del analizador léxico.
-            List<Token> tokens = analizador.analizar(analizador.cargarCodigoDesdeArchivo("codigo"));
-
-            // Construye la cadena de salida usando el método toString de cada token.
-            StringBuilder salida = new StringBuilder();
-            for (Token token : tokens) {
-                salida.append(token.toString()).append("\n");
-            }
-
-            // Establece el texto del JTextArea con la salida generada.
-            jTextOutput.setText(salida.toString());
-            llenarTS(tokens);
-            System.out.println("Archivo Analizado");
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void realizarAnalisisLexico() {
+        // Instancia el analizador léxico con el nombre del archivo.
+        analizador = new AnalizadorLexico("codigo");
+        // Obtiene los tokens del analizador léxico.
+        List<Token> tokens = analizador.analizar(analizador.cargarCodigoDesdeArchivo("codigo"));
+        // Construye la cadena de salida usando el método toString de cada token.
+        StringBuilder salida = new StringBuilder();
+        tokens.forEach(token -> {
+            salida.append(token.toString()).append("\n");
+        });
+        // Establece el texto del JTextArea con la salida generada.
+        jTextOutput.setText(salida.toString());
+        llenarTS(tokens);
+        System.out.println("Archivo Analizado");
     }
 
     // Método para llenar la tabla de símbolos
@@ -212,7 +202,7 @@ public class Interface extends javax.swing.JFrame {
         // Recorre la lista de tokens y agrega cada token a la tabla de símbolos
         for (Token token : tokens) {
             // Ignora los tokens de espacio y salto de línea
-            if (token.getTipo() == TipoToken.ESPACIO || token.getTipo() == TipoToken.SALTO) {
+            if (token.getTipo() == TipoToken.ESPACIO || token.getTipo() == TipoToken.SALTO || token.getTipo() == TipoToken.INVALIDO) {
                 continue;
             }
 
@@ -229,14 +219,12 @@ public class Interface extends javax.swing.JFrame {
         StringBuilder contenido = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(nombreArchivo))) {
             String linea;
-
             while ((linea = reader.readLine()) != null) {
                 contenido.append(linea).append("\n");
-
             }
             System.out.println("File read successfully.");
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error al leer el archivo: " + e.getMessage());
         }
         return contenido.toString();
     }

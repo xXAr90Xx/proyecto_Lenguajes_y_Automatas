@@ -7,19 +7,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnalizadorLexico {
-    
-    public AnalizadorLexico(String rutaArchivo) {
-        try {
-            // Carga el código desde el archivo y realiza el análisis léxico.
-            String codigoEntrada = cargarCodigoDesdeArchivo(rutaArchivo);
-            List<Token> tokens = analizar(codigoEntrada);
 
-            // Imprime los tokens resultantes.
-            for (Token token : tokens) {
-                System.out.println(token);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+    public AnalizadorLexico(String rutaArchivo) {
+        // Carga el código desde el archivo y realiza el análisis léxico.
+        String codigoEntrada = cargarCodigoDesdeArchivo(rutaArchivo);
+        List<Token> tokens = analizar(codigoEntrada);
+        // Imprime los tokens resultantes.
+        for (Token token : tokens) {
+            System.out.println(token);
         }
     }
 
@@ -28,15 +23,16 @@ public class AnalizadorLexico {
      *
      * @param rutaArchivo Ruta del archivo de texto.
      * @return Código cargado desde el archivo.
-     * @throws IOException Si ocurre un error al leer el archivo.
      */
-    public String cargarCodigoDesdeArchivo(String rutaArchivo) throws IOException {
+    public String cargarCodigoDesdeArchivo(String rutaArchivo) {
         StringBuilder codigo = new StringBuilder();
         try (BufferedReader reader = new BufferedReader(new FileReader(rutaArchivo))) {
             String linea;
             while ((linea = reader.readLine()) != null) {
                 codigo.append(linea).append("\n");
             }
+        } catch (IOException e) {
+            System.err.println("Error al cargar el archivo: " + e.getMessage());
         }
         return codigo.toString();
     }
@@ -50,9 +46,11 @@ public class AnalizadorLexico {
     public static List<Token> analizar(String codigo) {
         List<Token> tokens = new ArrayList<Token>();
 
-        String regex = "\\s+|("
-                + "Si|SiNo|FinSi|FinSino|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad"
-                + "\\d+|==|<=|>=|!=|[+*\\-/%=<>()¿?]|[a-zA-Z_][a-zA-Z0-9_]*|\"[^\"]*\")";
+        // Expresión regular actualizada
+        String regex = "(?i)\\s+|("
+                + "(SiNo|FinSino|Si|FinSi|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad|Vacio)"
+                + "|[+-]?\\d*\\.?\\d+([eE][+-]?\\d+)?"
+                + "|==|<=|>=|!=|[\\(|\\)|\\[|\\]|\\¿|\\?]|[a-zA-Z_][a-zA-Z0-9_]*|\"[^\"]*\")";
 
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(codigo);
@@ -65,17 +63,17 @@ public class AnalizadorLexico {
             // Identifica el tipo de token según la expresión regular.
             if (textoToken.matches("[+-]?\\d+|([+-]?\\d*\\.\\d+([eE][+-]?\\d+)?)?")) {
                 tipoToken = TipoToken.NUMERO;
-            } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad")) {
+            } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad|Vacio")) {
                 tipoToken = TipoToken.PALABRARESERVADA;
             } else if (textoToken.matches("\"[^\"]*\"")) {
                 tipoToken = TipoToken.CARACTER;
-            } else if (textoToken.matches(" ")) {
+            } else if (textoToken.equals(" ")) {
                 tipoToken = TipoToken.ESPACIO;
             } else if (textoToken.matches("[+|*|/|-|%|e|E]")) {
                 tipoToken = TipoToken.OPERADORAR;
             } else if (textoToken.matches("==|<=|>=|!=")) {
                 tipoToken = TipoToken.OPERADORRE;
-            } else if (textoToken.matches("\\[\\(|\\)|\\[|\\]|\\¿|\\?]")) {
+            } else if (textoToken.matches("[\\(|\\)|\\[|\\]|\\¿|\\?]")) {
                 tipoToken = TipoToken.OPERADORAG;
             } else if (textoToken.matches("\\[++|--]")) {
                 tipoToken = TipoToken.OPERADORIYD;
@@ -83,7 +81,7 @@ public class AnalizadorLexico {
                 tipoToken = TipoToken.OPERADORLOG;
             } else if (textoToken.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
                 tipoToken = TipoToken.IDENTIFICADOR;
-            } else if (textoToken.matches("\n")) {
+            } else if (textoToken.equals("\n")) {
                 tipoToken = TipoToken.SALTO;
             } else if (textoToken.matches("=|\\+=|-=")) {
                 tipoToken = TipoToken.OPERADORASG;
@@ -97,6 +95,8 @@ public class AnalizadorLexico {
 
         return tokens;
     }
+
+    // Enumeración, clase Token, etc., como antes...
 }
 
 /**
