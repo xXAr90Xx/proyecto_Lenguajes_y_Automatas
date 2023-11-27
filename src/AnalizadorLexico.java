@@ -104,7 +104,7 @@ public class AnalizadorLexico {
             }
 
             // Agrega el token a la lista.
-            tokens.add(new Token(tipoToken, textoToken));
+            tokens.add(new Token(tipoToken, textoToken,"error lexico"));
         }
 
         return tokens;
