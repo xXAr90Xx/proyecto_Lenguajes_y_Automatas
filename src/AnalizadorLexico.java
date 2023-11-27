@@ -63,17 +63,31 @@ public class AnalizadorLexico {
             // Identifica el tipo de token según la expresión regular.
             if (textoToken.matches("[+-]?\\d+|([+-]?\\d*\\.\\d+([eE][+-]?\\d+)?)?")) {
                 tipoToken = TipoToken.NUMERO;
-            } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad|Vacio")) {
+            } else if (textoToken.matches("IniC|FinC|IniB|FinB")) {
+                tipoToken = TipoToken.INICIODEBLOQUE;
+            } else if (textoToken.matches("Car|Cad|Num|Dec|Bool")) {
+                tipoToken = TipoToken.TIPODEDATO;
+            } else if (textoToken.matches("Com|MensajeS")) {
+                tipoToken = TipoToken.COMUNICACION;
+            } else if (textoToken.matches("Seno|Coseno|Tangente|Cotangente|Secante|Cosecante")) {
+                tipoToken = TipoToken.FUNCIONESESPECIALES;
+            } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Car|Cad|Num|IniC|FinC|IniB|FinB|Dec|Bool|Seno|Coseno|Tangente|Cotangente|Secante|Cosecante|Elegir|Com|MensajeS|DatoE|Posicion|Gravedad|Sprite|Velocidad")) {
                 tipoToken = TipoToken.PALABRARESERVADA;
+            } else if (textoToken.matches("Si|SiNo|Repite|Mientras|FMientras|Elegir")) {
+                tipoToken = TipoToken.CONTROL;
             } else if (textoToken.matches("\"[^\"]*\"")) {
                 tipoToken = TipoToken.CARACTER;
-            } else if (textoToken.equals(" ")) {
+            } else if (textoToken.matches("Gravedad")) {
+                tipoToken = TipoToken.CONSTANTESESPECIALES;
+            } else if (textoToken.matches("Sprite|Velocidad")) {
+                tipoToken = TipoToken.OBJETOSENTIDADES;
+            } else if (textoToken.matches(" ")) {
                 tipoToken = TipoToken.ESPACIO;
             } else if (textoToken.matches("[+|*|/|-|%|e|E]")) {
                 tipoToken = TipoToken.OPERADORAR;
             } else if (textoToken.matches("==|<=|>=|!=")) {
                 tipoToken = TipoToken.OPERADORRE;
-            } else if (textoToken.matches("[\\(|\\)|\\[|\\]|\\¿|\\?]")) {
+            } else if (textoToken.matches("\\[\\(|\\)|\\[|\\]|\\¿|\\?]")) {
                 tipoToken = TipoToken.OPERADORAG;
             } else if (textoToken.matches("\\[++|--]")) {
                 tipoToken = TipoToken.OPERADORIYD;
@@ -81,7 +95,7 @@ public class AnalizadorLexico {
                 tipoToken = TipoToken.OPERADORLOG;
             } else if (textoToken.matches("[a-zA-Z_][a-zA-Z0-9_]*")) {
                 tipoToken = TipoToken.IDENTIFICADOR;
-            } else if (textoToken.equals("\n")) {
+            } else if (textoToken.matches("\n")) {
                 tipoToken = TipoToken.SALTO;
             } else if (textoToken.matches("=|\\+=|-=")) {
                 tipoToken = TipoToken.OPERADORASG;
@@ -89,14 +103,12 @@ public class AnalizadorLexico {
                 tipoToken = TipoToken.INVALIDO;
             }
 
-             // Agregar el token normalmente
-//        tokens.add(new Token(tipoToken, textoToken));
+            // Agrega el token a la lista.
+            tokens.add(new Token(tipoToken, textoToken));
         }
 
         return tokens;
     }
-
-    // Enumeración, clase Token, etc., como antes...
 }
 
 /**
@@ -116,8 +128,16 @@ enum TipoToken {
     OPERADORLOG,
     OPERADORASG,
     PALABRARESERVADA,
-    SALTO
-    // ...
+    SALTO,
+    BUCLE,
+    EXCEPCIONES,
+    CONTROL,
+    INICIODEBLOQUE,
+    TIPODEDATO,
+    COMUNICACION,
+    FUNCIONESESPECIALES,
+    CONSTANTESESPECIALES,
+    OBJETOSENTIDADES,
 }
 
 /**
@@ -136,7 +156,7 @@ class Token {
      * @param tipo Tipo del token.
      * @param texto Texto asociado al token.
      */
-     // Constructor modificado para incluir el mensaje de error
+    // Constructor modificado para incluir el mensaje de error
     public Token(TipoToken tipo, String texto, String error) {
         this.tipo = tipo;
         this.texto = texto;
@@ -160,10 +180,12 @@ class Token {
     public String getTexto() {
         return texto;
     }
+
     // Método para obtener el mensaje de error
     public String getError() {
         return error;
     }
+
     /**
      * Representación en cadena del token.
      *
